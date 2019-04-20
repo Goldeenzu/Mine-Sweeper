@@ -1,4 +1,4 @@
-package org.jointheleague.level4.minesweeper;
+ package org.jointheleague.level4.minesweeper;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -47,6 +47,18 @@ public class MineSweeper {
     void initializeMines(int firstCellCol, int firstCellRow) {
         // TODO fill in
         // Hint, use `Optional.of(...)` to create a non-empty `Optional`.
+    		boolean[][] mineLoc = new boolean[WIDTH][HEIGHT];
+    		int i = 0;
+    		while(i < NUM_MINES){
+    			int x = rng.nextInt(WIDTH);
+    			int y = rng.nextInt(HEIGHT);
+    			if(x != firstCellRow && y != firstCellCol && mineLoc[x][y]) {
+    				mineLoc[x][y] = true;
+    				i++;
+    			}
+    		}
+    		mines = Optional.of(mineLoc);
+    		numCellsToOpen = WIDTH * HEIGHT - NUM_MINES;
     }
     
     /**
@@ -59,7 +71,17 @@ public class MineSweeper {
      */
     Integer getNeighboringMinesCount(int col, int row) {
         // TODO fill in
-        return null;
+    		int numMines = 0;
+    		if(mines.isPresent()) {
+	    		for(int i = Math.max(0, row-1); i <= Math.min(row+1, WIDTH-1); i++) {
+	    			for(int j = Math.max(0, row-1); j <= Math.min(row+1, HEIGHT-1); j++) {
+	    				if(i != row && j != col && mines.get()[i][j]) {
+	    					numMines++;
+	    				}
+	    			}
+	    		}
+    		}
+        return numMines;
     }
     
     /**
@@ -71,6 +93,12 @@ public class MineSweeper {
      */
     void resetGame(Object unused) {
         // TODO fill in
+    		mines = Optional.empty();
+    		for(int i = 0; i < WIDTH; i++) {
+    			for(int j = 0; j < WIDTH; j++) {
+    				
+    			}
+    		}
     }
     
     private void createAndShowFrame() {
